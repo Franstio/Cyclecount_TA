@@ -1,0 +1,117 @@
+<div class="container-fluid position-relative">
+  <div
+      class="d-flex flex-wrap justify-content-md-between justify-content-start align-items-center   fs-8">
+      <div class="d-flex justify-content-start align-items-center  w-100" style="max-width: 400px !important;">
+          <div class="fs-5  text-dt fw-bold ">Counting History</div>
+          <div class="fs-5   text-dark fw-bold">&nbsp;List&nbsp;</div>
+          <span  [ngClass]="badgechk(Lx17Data.totalData)"  class="fs-sm-8 badge bg-secondary">{{Lx17Data.totalData}}</span>
+      </div>
+      <div class="d-flex flex-wrap justify-content-md-end justify-content-start fs-8 align-items-center fw-bold w-100"
+          style="max-width:750px">
+          From Date:&nbsp;
+          <input type="date" [(ngModel)]="Filter.dFrom"  (ngModelChange)="setPage(1)" class="form-control w-100 mt-2" style="max-width:250px ;">
+          &nbsp;To Date:&nbsp;
+          <input type="date" [(ngModel)]="Filter.dTo" (ngModelChange)="setPage(1)" class="form-control w-100 mt-2" style="max-width:230px ;">
+          <button class="ms-md-2 btn btn-dt bg-dt w-100 mt-2" style="max-width: 150px;" >Export to Excel</button>
+      </div>
+  </div>
+  <div class="d-flex   flex-wrap justify-content-start justify-content-md-between align-items-center py-md-2 w-100">
+      <div class="w-100" style="max-width:500px ;">
+          <div class="d-flex flex-wrap justify-content-start w-100">
+              <div class="w-100 mt-2" style="max-width:80px ;">
+                  <select  class="form-select fs-8" [(ngModel)]="Filter.pagesize" (change)="setPage(1)">
+                      <option value="10">10</option>
+                      <option value="25">25</option>
+                      <option value="50">50</option>
+                      <option value="100">100</option>
+                  </select>
+              </div>
+              <div class="w-100" style="max-width:400px ;">
+                  <input name="search" [(ngModel)]="Filter.Search" (change)="setPage(1)" class="ms-md-3 mt-2 form-control fs-8" style="width: 100% !important;"
+                      placeholder="Search Material or Inventory Number" >
+              </div>
+          </div>
+      </div>
+      <div>
+      </div>
+  </div>
+  <div  class="mt-3 d-flex flex-wrap justify-content-start justify-content-md-between   w-100">
+      <div class="overflow-auto w-100  fs-8">
+          <table class="table bg-white">
+              <thead class="text-dt fw-bold">
+                  <tr>
+                      <th class=" fs-8" scope="col">Date</th>
+                      <th class=" fs-8" scope="col">Time</th>
+                      <th class=" fs-8" scope="col">Type</th>
+                      <th class=" fs-8" scope="col">Inventory Number</th>
+                      <th class=" fs-8" scope="col">Counting ID</th>
+                      <th class=" fs-8" scope="col">Material</th>
+                      <th class=" fs-8" scope="col">SS</th>
+                      <th class=" fs-8" scope="col">Storage Bin</th>
+                      <th class=" fs-8" scope="col">Vendor</th>
+                      <th class=" fs-8" scope="col">QUANT</th>
+                      <th class=" fs-8" scope="col">SAP Qty</th>
+                      <th class=" fs-8" scope="col">Counted Qty</th>
+                      <th class=" fs-8" scope="col">GAP QTY</th>
+                      <th class=" fs-8" scope="col">COUNT BY</th>
+                      <th class=" fs-8" scope="col">Status</th>
+                      <th class=" fs-8" scope="col">Action</th>
+                  </tr>
+              </thead>
+              <tbody *ngIf="Lx17Data.data.length > 0 else norecount">
+                  <tr
+                      *ngFor="let item of Lx17Data.data  ">
+                      <th class=" fs-8">{{item.ymd8up | date: 'YYYY-MM-dd'}}</th>
+                      <td class=" fs-8">{{gettime(item.ymd8up)}}</td>
+                      <td class=" fs-8">{{item.lgtyp}}</td>
+                      <td class=" fs-8">{{item.ivnum}}</td>
+                      <td class=" fs-8">{{item.id}}</td>
+                      <td class=" fs-8">{{item.matnr}}</td>
+                      <td class=" fs-8">{{item.sobkz}}</td>
+                      <td class=" fs-8">{{item.lgpla}}</td>
+                      <td class=" fs-8">{{item.sonum}}</td>
+
+                      <td   class=" fs-8">{{item.lqnum}}</td>
+                      <td class=" fs-8">{{item.gesme}}</td>
+                      <td class=" fs-8">{{item.menga}}</td>
+                      <td class=" fs-8">{{item.menga-item.gesme}}</td>
+                      <td class=" fs-8">{{item.uname}}</td>
+                      <td class=" fs-8">{{item.cntstatus}}</td>
+                      <td class=" fs-8">{{action(item.action)}}</td>
+                  </tr>
+
+              </tbody>
+              <ng-template #norecount>
+                  <tbody>
+                      <tr>
+                          <th class="fs-sm-8 text-center" colspan="14">There is no data</th>
+                      </tr>
+                  </tbody>
+              </ng-template>
+          </table>
+      </div>
+      <nav *ngIf="Lx17Data.totalData > 0" aria-label="Page navigation example">
+        <ul class="pagination justify-content-end  me-2 pb-3 ">
+          <li class="page-item" *ngIf="!Lx17Data.firstPage"><a class="page-link" (click)="setPage(1)"
+              href="javascript:void(0);">
+              First Page</a></li>
+          <li class="page-item" *ngIf="!Lx17Data.lastPage"><a (click)="setPage(Filter.page-1)"
+              class="page-link" href="javascript:void(0);">«
+              Previous</a></li>
+          <ng-container *ngFor="let item of createRange(Lx17TtlPage);let i = index;">
+            <li class="page-item" *ngIf="i< Lx17Data.pageNum +3 && i> Lx17Data.pageNum -6"
+              [ngClass]="{'active': Lx17Data.pageNum === i+1}"><a class="page-link" (click)="setPage(i+1)"
+                href="javascript:void(0);">{{i+1}}</a></li>
+          </ng-container>
+          <li class="page-item"><a class="page-link" href="javascript:void(0);"
+              (click)="setPage(Filter.page+1)" *ngIf="!Lx17Data.lastPage">Next
+              »</a></li>
+          <li class="page-item" *ngIf="Lx17Data.pageNum < (Lx17TtlPage -3) "><a class="page-link"
+              (click)="setPage(Lx17TtlPage)" href="javascript:void(0);">
+              Last Page</a></li>
+
+        </ul>
+      </nav>
+  </div>
+
+</div>

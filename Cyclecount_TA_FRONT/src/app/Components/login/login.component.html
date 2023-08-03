@@ -1,0 +1,53 @@
+
+<div class="d-flex align-items-center" style="height:100% ;">
+  <div class="container-fluid bg-white w-100">
+
+    <div class='d-flex justify-content-around flex-wrap align-items-center'>
+      <div class="sidebar-login p-0">
+        <img class="login-logo" src="assets/img/logo/SE_logotype_green.svg" alt="Logo SE Green">
+      </div>
+      <div class="sidebar-login p-md-3 p-0 pb-3 ">
+        <div class="d-flex flex-column align-items-stretch justify-content-evenly">
+          <div class="title">
+            <h3 class="text-dark fw-bold d-inline">Welcome to </h3>
+            <h3 class="text-dt d-inline fw-bold">Cycle Count</h3>
+          </div>
+          <div class="login">
+            <form [formGroup]="fg">
+            <div class="fr-dt-1 text-dt mt-2 mb-1">
+              <div class="input-group mb-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"> <i class="bi bi-person-check-fill"></i> </span>
+                </div>
+                <input class="form-control" formControlName="username"  type="text" placeholder="Username" alt="Username">
+              </div>
+            </div>
+
+            <div class="fr-dt-1 text-dt mt-1 mb-1">
+              <div class="input-group mb-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"> <i class="bi bi-key-fill"></i> </span>
+                </div>
+                <input class="form-control" formControlName="password" type="password" placeholder="Password" alt="Password">
+              </div>
+            </div>
+            </form>
+          </div>
+
+          <div class="title-footer">
+
+            <div class="fr-dt-1 text-dt mt-1  ">
+              <button class="btn btn-dt bg-dt border-dt w-100" (click)="Login()"><i class="bi bi-box-arrow-in-right"></i> Login</button>
+            </div>
+            <div class="fr-dt-1 text-dt mt-1">
+              <button class="clear-both text-primary border-0 bg-transparent" data-bs-toggle="modal"
+                data-bs-target="#modal_add">Forget Password</button>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>

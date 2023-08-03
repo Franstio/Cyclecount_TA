@@ -1,0 +1,56 @@
+<nav class="navbar px-3 navbar-expand-lg navbar-dark bg-dt p-0 m-0 text-light w-100">
+  <div class="header">
+    <a href=""> <img class="w-100" alt="SE Logo" src="assets/img/logo/SE_LOGO.svg" /></a>
+  </div>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div *ngIf="(isLogin$|async)" class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav w-100">
+      <li class="nav-item">
+        <a class="nav-link fs-8 fw-bold"   routerLink="count" routerLinkActive="active"
+        [routerLinkActiveOptions]={exact:true} >Count</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fs-8 fw-bold"   routerLink="count-history" routerLinkActive="active"
+        [routerLinkActiveOptions]={exact:true} >Count History</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fs-8 fw-bold"   routerLink="lx17report" routerLinkActive="active"
+        [routerLinkActiveOptions]={exact:true} >Report</a>
+      </li>
+    </ul>
+    <ul *ngIf="(isLogin$| async)" class="navbar-nav flex-justify-end " style="width: 40%;">
+      <div class=" py-1 ms-md-0 ms-2 " style="width: 70%important;" >
+        <span *ngIf="(data$ | async)!.plant.length>0" class="ms-md-0 ms-2">
+        <select [(ngModel)]="selectedPlant.Id"   (ngModelChange)="updatePlant($event)" class="form-select p-0 m-0 w-100  pe-5 ps-1" aria-label="Please select plant !"  >
+
+          <ng-container *ngFor="let item of plants">
+            <option [value]="item.Id" >{{item.DeptName}}</option>
+          </ng-container>
+        </select></span>
+      </div>
+      <ng-container *ngIf="(isLogin$ | async)">
+
+      <li class="nav-item dropdown">
+        <a class="nav-item nav-link dropdown-toggle fw-bold"
+          href="#"
+          id="navbarDropdown"
+          role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="ms-md-0 ms-2">  {{(data$ | async)!.username }}</span>
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li  >
+            <a class="dropdown-item fw-bold" routerLink="/change-password">Change Password</a>
+          </li>
+          <li  >
+            <a class="dropdown-item fw-bold" (click)="Logout()">Logout</a>
+          </li>
+
+        </ul>
+      </li>
+      </ng-container>
+    </ul>
+  </div>
+</nav>

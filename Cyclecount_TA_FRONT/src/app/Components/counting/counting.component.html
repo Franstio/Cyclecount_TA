@@ -1,0 +1,254 @@
+
+<ngb-toast style="position: absolute;top: 30px;left:20px;z-index: 200;" class="bg-success text-light" *ngIf="show" [delay]="3000"  [autohide]="true" (hidden)="show=false">
+  Lx17 Material Have Been Successfully Syncronized with SAP
+</ngb-toast>
+<ngb-toast style="position: absolute;top: 30px;left:20px;z-index: 200;"  [header]="'Notice'" class="bg-info text-light" *ngIf="!show && !complete" [autohide]="false">
+  <div class="d-flex flex-row align-items-center">
+    Syncronize Lx17 with SAP <div class="ms-3 spinner-border "></div>
+  </div>
+</ngb-toast>
+<div class="container-fluid position-relative">
+
+  <div
+  class="pt-4  d-flex flex-wrap justify-content-md-between justify-content-start px-md-5 py-3 w-100 m-0 p-0">
+  <div class="card bg-white w-100" style="max-width:800px ;">
+      <div class="card-header w-100 bg-white" id="headingOne">
+          <div class="d-flex justify-content-between w-100">
+              <h5> Filter</h5>
+              <button class="btn btn-link text-dark " type="button" data-bs-toggle="collapse"
+                  data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                  <i class="bi bi-caret-down"></i>
+              </button>
+          </div>
+      </div>
+      <div class="collapse " id="collapseExample">
+          <div class="container-fluid">
+              <div class="d-flex justify-content-md-between flex-wrap p-3">
+                  <div class="px-3 py-2" style="width:300px">
+                      <div class="fw-bold">
+                          Number Raw Material
+                      </div>
+                      <input type="text" class="form-control" name="matnum" [(ngModel)]="liccFilter.count">
+                  </div>
+                  <div class="px-3 py-2" style="width:300px">
+                      <div class="fw-bold">
+                          Storage Bin
+                      </div>
+                      <input type="text" class="form-control" name="matnum" [(ngModel)]="liccFilter.search">
+                  </div>
+                  <div class="px-3 py-2" style="width:300px">
+                      <div class="fw-bold">
+                          Storage Type
+                      </div>
+                      <input type="text" class="form-control" name="matnum" [(ngModel)]="liccFilter.search">
+                  </div>
+                  <div class="px-3 py-2" style="width:300px">
+                      <div class="fw-bold">
+                          Material Number
+                      </div>
+                      <input type="text" class="form-control" name="matnum" [(ngModel)]="liccFilter.search">
+                  </div>
+                  <div class="px-3 py-2" style="width:300px">
+                      <div class="fw-bold">
+                          Inv Period From
+                      </div>
+                      <input type="date" [min]="today" [(ngModel)]="liccFilter.dFrom" class="form-control" name="matnum">
+                  </div>
+                  <div class="px-3 py-2" style="width:300px">
+                      <div class="fw-bold">
+                          Inv Period To
+                      </div>
+                      <input type="date" [min]="today " [(ngModel)]="liccFilter.dTo" class="form-control" name="matnum">
+                  </div>
+                  <div class="px-3 py-2" style="width:300px">
+                    <div class="fw-bold">
+                        Class Material Range
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                        <select [(ngModel)]="liccFilter.classFrom" class="form-control w-100">
+                          <option value="A" selected>A</option>
+                          <option value="B">B</option>
+                        </select>
+                      </div>
+                      <div class="col-6">
+                        <select [(ngModel)]="liccFilter.classTo" class="form-control w-100">
+                          <option value="A">A</option>
+                          <option value="B" selected>B</option>
+                        </select>
+                      </div>
+                    </div>
+                </div>
+              </div>
+
+          </div>
+      </div>
+  </div>
+  <button (click)="openLicc()" class="btn btn-info align-self-baseline my-2 text-white fs-sm-8"
+       style="width:150px ;">
+      <span [ngClass]=""></span> Request LICC</button>
+</div>
+  <div class="d-flex flex-wrap justify-content-start justify-content-md-between align-items-center px-md-5 py-2">
+    <div class="d-flex justify-content-start align-items-center  w-100" style="max-width: 410px;">
+      <div class="fs-5 text-dt fw-bold ">Recount Material</div>
+      <div class="fs-5 text-dark fw-bold">&nbsp;List&nbsp;</div>
+      <span class="fs-8 badge " [ngClass]="badgechk(ReCounting.totalData)">{{ReCounting.totalData}}</span>
+    </div>
+    <div class="w-100" style="max-width: 310px;">
+      <input name="search" [(ngModel)]="ReCountFilter.Search" class="form-control fs-8"
+        (change)="setPage(1,'ReCount')" style="width: 100% !important;"
+        placeholder="Search Material or Inventory Number">
+    </div>
+  </div>
+  <div class="d-flex flex-wrap justify-content-start justify-content-md-between px-md-5 w-100">
+    <div class="overflow-auto w-100 fs-sm-8">
+      <table class="table bg-white">
+        <thead class="text-dt fw-bold">
+          <tr>
+            <th class="fs-sm-8" scope="col">Material Number</th>
+            <th class="fs-sm-8" scope="col">Plant</th>
+            <th class="fs-sm-8" scope="col">Inventory Number</th>
+            <th class="fs-sm-8" scope="col">Vendor</th>
+            <th class="fs-sm-8" scope="col">SS</th>
+            <th class="fs-sm-8" scope="col">Stype</th>
+            <th class="fs-sm-8" scope="col">SBIN</th>
+            <th class="fs-sm-8" scope="col">QUANT</th>
+            <th class="fs-sm-8" scope="col">Action</th>
+          </tr>
+        </thead>
+
+        <tbody *ngIf="ReCounting.data.length>0 else norecount">
+          <tr *ngFor="let item of ReCounting.data    ">
+            <th class="fs-sm-8">{{item.matnr}}</th>
+            <td class="fs-sm-8">{{item.werks}}</td>
+            <td class="fs-sm-8">{{item.ivnum}}</td>
+            <td class="fs-sm-8">{{item.sonum}}</td>
+            <td class="fs-sm-8">{{item.sobkz}}</td>
+            <td class="fs-sm-8">{{item.lgtyp}}</td>
+            <td class="fs-sm-8">{{item.lgpla}}</td>
+            <td class="fs-sm-8">{{item.lqnum}}</td>
+            <td class="fs-sm-8"><button (click)="showCountModal(item,'ReCount')" class="btn btn-info text-white">Count</button></td>
+          </tr>
+
+        </tbody>
+        <ng-template #norecount>
+          <tbody>
+            <tr>
+              <th class="fs-sm-8 text-center" colspan="12">There is no data</th>
+            </tr>
+          </tbody>
+        </ng-template>
+      </table>
+    </div>
+    <div class="d-flex justify-content-end w-100">
+      <nav *ngIf="ReCounting.totalData > 0" aria-label="Page navigation example">
+        <ul class="pagination justify-content-end  me-2 pb-3 ">
+          <li class="page-item" *ngIf="!ReCounting.firstPage"><a class="page-link" (click)="setPage(1,'ReCount')"
+              href="javascript:void(0);">
+              First Page</a></li>
+          <li class="page-item" *ngIf="!ReCounting.lastPage"><a (click)="setPage(ReCountFilter.page-1,'ReCount')"
+              class="page-link" href="javascript:void(0);">«
+              Previous</a></li>
+          <ng-container *ngFor="let item of createRange(ReCountTtlPage);let i = index;">
+            <li class="page-item" *ngIf="i< ReCounting.pageNum +3 && i> ReCounting.pageNum -6"
+              [ngClass]="{'active': ReCounting.pageNum === i+1}"><a class="page-link" (click)="setPage(i+1,'ReCount')"
+                href="javascript:void(0);">{{i+1}}</a></li>
+          </ng-container>
+          <li class="page-item"><a class="page-link" href="javascript:void(0);"
+              (click)="setPage(ReCountFilter.page+1,'ReCount')" *ngIf="!ReCounting.lastPage">Next
+              »</a></li>
+          <li class="page-item" *ngIf="ReCounting.pageNum < (ReCountTtlPage -3) "><a class="page-link"
+              (click)="setPage(ReCountTtlPage,'ReCount')" href="javascript:void(0);">
+              Last Page</a></li>
+
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <div
+  class="d-flex flex-wrap justify-content-start justify-content-md-between align-items-center px-md-5 py-2">
+  <div class="d-flex justify-content-start align-items-center w-100  " style="max-width: 410px;">
+      <div class="fs-5 text-dt fw-bold ">LX17 Material</div>
+      <div class="fs-5 text-dark fw-bold">&nbsp;List&nbsp;</div>
+      <span class="  fs-8 badge " [ngClass]="badgechk(Counting.totalData)">{{Counting.totalData}}</span>
+  </div>
+
+  <div class="w-100 d-flex " style="max-width: 450px;">
+      <button  class="btn btn-info mx-2  text-white" >Add Material</button>
+      <input name="search" class="form-control fs-8" [(ngModel)]="CountFilter.Search" placeholder="Search Material or Inventory Number"
+        (change)="setPage(1,'Count')"   style="max-width: 310px;">
+  </div>
+</div>
+<div
+  class="d-flex flex-wrap justify-content-start justify-content-md-between px-md-5 w-100">
+  <div class="overflow-auto w-100 fs-sm-8">
+      <table class="table bg-white">
+          <thead class="text-dt fw-bold">
+              <tr>
+                  <!-- <th class="fs-sm-8 text-center" scope="col"><input type="checkbox" disabled  (change)="checkall($event)" alt="Check all" id="chkall"></th> -->
+                  <th class="fs-sm-8" scope="col">Material Number</th>
+                  <th class="fs-sm-8" scope="col">Plant</th>
+                  <th class="fs-sm-8" scope="col">Inventory Number</th>
+                  <th class="fs-sm-8" scope="col">Vendor</th>
+                  <th class="fs-sm-8" scope="col">SS</th>
+                  <th class="fs-sm-8" scope="col">Stype</th>
+                  <th class="fs-sm-8" scope="col">SBIN</th>
+                  <th class="fs-sm-8" scope="col">QUANT</th>
+                  <th class="fs-sm-8" scope="col">Action</th>
+              </tr>
+          </thead>
+          <tbody *ngIf="Counting.data.length > 0 else norecount">
+              <tr *ngFor="let item of Counting.data   ">
+                  <!-- <th class="fs-sm-8 text-center">
+                      <input type="checkbox" [id]="item.Id" (change)="checkchange({event:$event,id:item.Id})">
+                  </th> -->
+                  <th class="fs-sm-8">{{item.matnr}}</th>
+                  <td class="fs-sm-8">{{item.werks}}</td>
+                  <td class="fs-sm-8">{{item.ivnum}}</td>
+                  <td class="fs-sm-8">{{item.sobkz}}</td>
+                  <td class="fs-sm-8">{{item.sonum}}</td>
+                  <td class="fs-sm-8">{{item.lgtyp}}</td>
+                  <td class="fs-sm-8">{{item.lgpla}}</td>
+                  <td class="fs-sm-8">{{item.lqnum}}</td>
+                  <td class="fs-sm-8"><button (click)="showCountModal(item,'Count')" class="btn btn-info text-white"
+                          >Count</button></td>
+              </tr>
+
+          </tbody>
+          <ng-template #norecount>
+              <tbody>
+                  <tr>
+                      <th class="fs-sm-8 text-center" colspan="12">There is no data</th>
+                  </tr>
+              </tbody>
+          </ng-template>
+      </table>
+  </div>
+  <div class="d-flex justify-content-end w-100">
+    <nav *ngIf="Counting.totalData > 0" aria-label="Page navigation example">
+      <ul class="pagination justify-content-end  me-2 pb-3 ">
+        <li class="page-item" *ngIf="!Counting.firstPage"><a class="page-link" (click)="setPage(1,'Count')"
+            href="javascript:void(0);">
+            First Page</a></li>
+        <li class="page-item" *ngIf="!Counting.lastPage"><a (click)="setPage(CountFilter.page-1,'Count')"
+            class="page-link" href="javascript:void(0);">«
+            Previous</a></li>
+        <ng-container *ngFor="let item of createRange(CountTtlPage);let i = index;">
+          <li class="page-item" *ngIf="i< Counting.pageNum +3 && i> Counting.pageNum -6"
+            [ngClass]="{'active': Counting.pageNum === i+1}"><a class="page-link" (click)="setPage(i+1,'Count')"
+              href="javascript:void(0);">{{i+1}}</a></li>
+        </ng-container>
+        <li class="page-item"><a class="page-link" href="javascript:void(0);"
+            (click)="setPage(CountFilter.page+1,'Count')" *ngIf="!Counting.lastPage">Next
+            »</a></li>
+        <li class="page-item" *ngIf="Counting.pageNum < (CountTtlPage -3) "><a class="page-link"
+            (click)="setPage(CountTtlPage,'ReCount')" href="javascript:void(0);">
+            Last Page</a></li>
+
+      </ul>
+    </nav>
+  </div>
+
+</div>
+</div>

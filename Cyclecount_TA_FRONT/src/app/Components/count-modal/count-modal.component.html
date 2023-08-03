@@ -1,0 +1,70 @@
+
+      <div class="modal-header bg-white text-dark fw-bold">
+        <h5 class="modal-title fw-bold" id=" CrtInventoryModalLabel">Inventory Number : &nbsp;</h5>
+        <span *ngIf="material != null" class="text-dt fs-5 fw-bold">
+          {{material.ivnum}}</span>
+        <a  (click)="activeModal.close()" class="btn-close"></a>
+      </div>
+      <div class="modal-body d-flex justify-content-end align-items-center">
+        <div class="px-3 py-0">
+          <label>Count QTY: </label>
+        </div>
+        <div class="px-3 py-0">
+          <input type="number" #countInput [(ngModel)]="material.menga"   class="form-control rounded">
+        </div>
+      </div>
+      <div class="modal-body overflow-auto d-flex justify-content-center pt-0 mt-0 w-100">
+
+        <table *ngIf="material != null"
+          class="p-0 m-0 table table-hover  table-bordered text-center fs-8  w-100">
+          <thead class="border-dt w-100">
+
+            <tr class="align-middle bg-dt border-dt fs-10 w-100">
+              <td colspan="2" class="fs-3 bg-dt fw-bold w-100">{{type}}ed</td>
+            </tr>
+          </thead>
+          <tbody class="m-0 p-0" *ngIf="material != null">
+            <tr>
+              <td>Material</td>
+              <td>{{material.matnr}}</td>
+            </tr>
+            <tr>
+              <td>Inventory Number</td>
+              <td>{{material.ivnum}}</td>
+            </tr>
+            <tr>
+              <td>SBin</td>
+              <td>{{material.lgpla}}</td>
+            </tr>
+            <tr>
+              <td>Quant</td>
+              <td>{{material.lqnum}}</td>
+            </tr>
+            <tr>
+              <td>QTY Counted</td>
+              <td>{{material.menga}}</td>
+            </tr>
+            <tr>
+              <td>SS</td>
+              <td>{{material.sobkz}}</td>
+            </tr>
+            <tr>
+              <td>Vendor</td>
+              <td>{{material.sonum}}</td>
+            </tr>
+            <ng-template #nodata>
+              <tr>
+                <td colspan="23">No Data</td>
+              </tr>
+            </ng-template>
+          </tbody>
+          <tfoot>
+          </tfoot>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn"  [disabled]="material.menga<0 || material.menga == null "
+          [ngClass]="{'btn-secondary': material.menga<0, 'btn-success':material.menga>=0 }" (click)="Count()">Finish
+          Counting</button>
+      </div>
+

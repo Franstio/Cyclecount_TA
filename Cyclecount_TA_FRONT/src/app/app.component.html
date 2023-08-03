@@ -1,0 +1,12 @@
+<div [ngClass]="((isLogin$|async) ? '': 'bg-login')"
+  class="d-flex flex-column align-items-center justify-content-between w-100 m-0 p-0"
+  style="padding-top:20px;min-height:100vh">
+  <app-Header *ngIf="!(isLogin$ | async)" class="w-100"></app-Header>
+  <div class="container-fluid w-100 m-0 p-0 ">
+    <app-Header *ngIf="isLogin$ | async" class="w-100"></app-Header>
+    <router-outlet></router-outlet>
+  </div>
+  <div class="container-fluid w-100 m-0 p-0">
+  </div>
+</div>
+<app-loading></app-loading>
